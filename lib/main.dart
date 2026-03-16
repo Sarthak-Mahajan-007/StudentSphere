@@ -6,6 +6,10 @@ import 'core/services/supabase_service.dart';
 import 'core/providers/auth_provider.dart';
 import 'providers/chat_provider.dart';
 import 'screens/auth/auth_wrapper.dart';
+import 'screens/admin/create_admin_screen.dart';
+import 'screens/events/events_screen.dart';
+import 'screens/resources/resources_list_screen.dart';
+import 'screens/chat/chat_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +72,14 @@ class StudentSphereApp extends StatelessWidget {
             ),
           ),
         ),
+
+        /// 🚀 Routes for navigation
+        routes: {
+          '/create_admin': (context) => const CreateAdminScreen(),
+          '/events': (context) => const EventsScreen(),
+          '/resources': (context) => const ResourcesListScreen(),
+          '/chat': (context) => const ChatListScreen(),
+        },
 
         /// 🚀 AuthWrapper controls navigation
         home: const AuthWrapper(),

@@ -3,10 +3,13 @@ import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/event_provider.dart';
 import '../providers/note_provider.dart';
+import '../core/models/user_model.dart';
+import '../core/services/permission_service.dart';
 import 'events/events_screen.dart';
 import 'volunteers/volunteers_screen.dart';
 import 'notes/notes_screen.dart';
 import 'chat/chat_list_screen.dart';
+import 'hostel/hostel_manager_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,38 +21,52 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const EventsScreen(),
-    const VolunteersScreen(),
-    const NotesScreen(),
-    const ChatListScreen(),
-  ];
+  List<Widget> _getScreensForRole(UserRole role) {
+    switch (role) {
+      case UserRole.student:
+        return [
+          const DashboardScreen(),
+          const EventsScreen(),
+          const VolunteersScreen(),
+          const NotesScreen(),
+          const ChatListScreen(),
+        ];
+      case UserRole.faculty:
+        return [
+          const DashboardScreen(),
+          const EventsScreen(),
+          const VolunteersScreen(),
+          const NotesScreen(),
+          const ChatListScreen(),
+        ];
+      case UserRole.admin:
+        return [
+          const DashboardScreen(),
+          const EventsScreen(),
+          const VolunteersScreen(),
+          const NotesScreen(),
+          const ChatListScreen(),
+        ];
+      case UserRole.warden:
+        return [
+          const HostelManagerScreen(),
+        ];
+      case UserRole.guest:
+        return [
+          const DashboardScreen(),
+          const EventsScreen(),
+        ];
+      default:
+        return [
+          const DashboardScreen(),
+        ];
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student Sphere'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              context.read<UserProvider>().logout();
-            },
-            tooltip: 'Logout',
-          ),
-        ],
-      ),
-      body: _screens[_currentIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        destinations: const [
+  List<NavigationDestination> _getDestinationsForRole(UserRole role) {
+    switch (role) {
+      case UserRole.student:
+        return const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
             selectedIcon: Icon(Icons.dashboard),
@@ -75,7 +92,134 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedIcon: Icon(Icons.chat),
             label: 'Chat',
           ),
+        ];
+      case UserRole.faculty:
+        return const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.event_outlined),
+            selectedIcon: Icon(Icons.event),
+            label: 'Events',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.volunteer_activism_outlined),
+            selectedIcon: Icon(Icons.volunteer_activism),
+            label: 'Volunteers',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.note_outlined),
+            selectedIcon: Icon(Icons.note),
+            label: 'Resources',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.chat_outlined),
+            selectedIcon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+        ];
+      case UserRole.admin:
+        return const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.event_outlined),
+            selectedIcon: Icon(Icons.event),
+            label: 'Events',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.people_outlined),
+            selectedIcon: Icon(Icons.people),
+            label: 'Users',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.note_outlined),
+            selectedIcon: Icon(Icons.note),
+            label: 'Resources',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.chat_outlined),
+            selectedIcon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+        ];
+      case UserRole.warden:
+        return const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Hostel',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.restaurant_outlined),
+            selectedIcon: Icon(Icons.restaurant),
+            label: 'Mess',
+          ),
+        ];
+      case UserRole.guest:
+        return const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.event_outlined),
+            selectedIcon: Icon(Icons.event),
+            label: 'Events',
+          ),
+        ];
+      default:
+        return const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Home',
+          ),
+        ];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().currentUser;
+    final role = user?.role ?? UserRole.guest;
+    final screens = _getScreensForRole(role);
+    final destinations = _getDestinationsForRole(role);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Student Sphere - ${PermissionService.getRoleDisplayName(role)}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<UserProvider>().logout();
+            },
+            tooltip: 'Logout',
+          ),
         ],
+      ),
+      body: _currentIndex < screens.length ? screens[_currentIndex] : screens.first,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        destinations: destinations,
       ),
     );
   }

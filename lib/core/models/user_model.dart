@@ -2,6 +2,7 @@ enum UserRole {
   student,
   faculty,
   admin,
+  warden,  // Changed from hostelManager to match database constraint
   guest;
 
   String get value {
@@ -12,6 +13,8 @@ enum UserRole {
         return 'faculty';
       case UserRole.admin:
         return 'admin';
+      case UserRole.warden:
+        return 'warden';  // Changed to match database
       case UserRole.guest:
         return 'guest';
     }
@@ -25,6 +28,8 @@ enum UserRole {
         return UserRole.faculty;
       case 'admin':
         return UserRole.admin;
+      case 'warden':  // Updated to match database
+        return UserRole.warden;
       case 'guest':
         return UserRole.guest;
       default:

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:student_sphere/screens/admin/create_admin_screen.dart';
+import 'package:student_sphere/screens/events/events_screen.dart';
+import 'package:student_sphere/screens/resources/resources_list_screen.dart';
+import 'package:student_sphere/screens/chat/chat_list_screen.dart';
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
@@ -50,7 +54,7 @@ class AdminDashboard extends StatelessWidget {
               title: 'User Management',
               subtitle: 'Manage users and roles',
               onTap: () {
-                // TODO: Navigate to user management
+                Navigator.pushNamed(context, '/create_admin');
               },
             ),
             _AdminCard(
@@ -58,7 +62,7 @@ class AdminDashboard extends StatelessWidget {
               title: 'Event Management',
               subtitle: 'View and manage all events',
               onTap: () {
-                // TODO: Navigate to event management
+                Navigator.pushNamed(context, '/events');
               },
             ),
             _AdminCard(
@@ -66,7 +70,7 @@ class AdminDashboard extends StatelessWidget {
               title: 'Resource Management',
               subtitle: 'Manage all resources',
               onTap: () {
-                // TODO: Navigate to resource management
+                Navigator.pushNamed(context, '/resources');
               },
             ),
             _AdminCard(
@@ -75,6 +79,9 @@ class AdminDashboard extends StatelessWidget {
               subtitle: 'Configure system settings',
               onTap: () {
                 // TODO: Navigate to settings
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Settings coming soon!')),
+                );
               },
             ),
             _AdminCard(
@@ -83,6 +90,9 @@ class AdminDashboard extends StatelessWidget {
               subtitle: 'View platform usage statistics',
               onTap: () {
                 // TODO: Navigate to analytics
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Analytics coming soon!')),
+                );
               },
             ),
           ],

@@ -7,6 +7,8 @@ import '../student/student_dashboard.dart';
 import '../faculty/faculty_dashboard.dart';
 import '../admin/admin_dashboard.dart';
 import '../guest/guest_dashboard.dart';
+import '../hostel/hostel_manager_screen.dart';
+import '../hostel/hostel_manager_dashboard.dart';
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
@@ -35,6 +37,8 @@ class AuthWrapper extends StatelessWidget {
             return const FacultyDashboard();
           case UserRole.admin:
             return const AdminDashboard();
+          case UserRole.warden:
+            return const HostelManagerDashboard();
           case UserRole.guest:
             return const GuestDashboard();
         }

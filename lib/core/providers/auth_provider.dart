@@ -157,6 +157,8 @@ class AuthProvider with ChangeNotifier {
         return action != 'system_config'; // Faculty can't modify system config
       case UserRole.student:
         return action == 'view' || action == 'register' || action == 'upload_notes';
+      case UserRole.warden:
+        return action == 'hostel_management' || action == 'view' || action == 'allocate_rooms';
       case UserRole.guest:
         return action == 'view_public';
     }
