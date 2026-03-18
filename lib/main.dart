@@ -8,8 +8,13 @@ import 'providers/chat_provider.dart';
 import 'screens/auth/auth_wrapper.dart';
 import 'screens/admin/create_admin_screen.dart';
 import 'screens/events/events_screen.dart';
+import 'screens/events/admin_events_screen.dart';
 import 'screens/resources/resources_list_screen.dart';
+import 'screens/resources/admin_resources_screen.dart';
 import 'screens/chat/chat_list_screen.dart';
+import 'screens/hostel/hostel_application_screen.dart';
+import 'screens/hostel/mess_menu_screen.dart';
+import 'screens/hostel/hostel_manager_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,8 +82,12 @@ class StudentSphereApp extends StatelessWidget {
         routes: {
           '/create_admin': (context) => const CreateAdminScreen(),
           '/events': (context) => const EventsScreen(),
+          '/admin_events': (context) => const AdminEventsScreen(),
           '/resources': (context) => const ResourcesListScreen(),
+          '/admin_resources': (context) => const AdminResourcesScreen(),
           '/chat': (context) => const ChatListScreen(),
+          '/hostel_application': (context) => const HostelApplicationScreen(),
+          '/mess_menu': (context) => const MessMenuScreen(),
         },
 
         /// 🚀 AuthWrapper controls navigation

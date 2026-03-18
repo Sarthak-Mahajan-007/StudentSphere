@@ -227,4 +227,47 @@ class ResourceService {
       return [];
     }
   }
+
+  static Future<void> deleteResource(String resourceId) async {
+    try {
+      // First get the resource to delete the file from storage
+      final resource = await Supabase.instance.client
+          .from('resources')
+          .select('file_url')
+          .eq('id', resourceId)
+          .single();
+      
+      // Delete from database
+      await Supabase.instance.client
+          .from('resources')
+          .delete()
+          .eq('id', resourceId);
+      
+      // Delete file from storage if URL exists
+      if (resource['file_url'] != null) {
+        final fileUrl = resource['file_url'] as String;
+        // Extract file path from URL
+        final uri = Uri.parse(fileUrl);
+        final pathSegments = uri.pathSegments;
+        if (pathSegments.isNotEmpty) {
+          final storagePath = pathSegments.last;
+          await Supabase.instance.client.storage
+              .from('resources')
+              .remove([storagePath]);
+          debugPrint('🗑️ Deleted file from storage: $storagePath');
+        }
+      }
+      
+      debugPrint('🗑️ Deleted resource: $resourceId');
+    } catch (e) {
+      debugPrint('❌ Error deleting resource: $e');
+      rethrow;
+    }
+  }
+
+  static Stream<List<ResourceModel>> getResourcesStream() {
+    return SupabaseDatabaseService.getResourcesStream().map((dataList) {
+      return dataList.map((item) => ResourceModel.fromMap(item)).toList();
+    });
+  }
 }

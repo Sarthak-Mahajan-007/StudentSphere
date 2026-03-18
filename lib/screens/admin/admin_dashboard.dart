@@ -1,17 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:student_sphere/screens/admin/create_admin_screen.dart';
-import 'package:student_sphere/screens/events/events_screen.dart';
-import 'package:student_sphere/screens/resources/resources_list_screen.dart';
+import 'package:student_sphere/screens/events/admin_events_screen.dart';
+import 'package:student_sphere/screens/resources/admin_resources_screen.dart';
 import 'package:student_sphere/screens/chat/chat_list_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:student_sphere/core/providers/auth_provider.dart';
 
-class AdminDashboard extends StatelessWidget {
+class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
+
+  @override
+  State<AdminDashboard> createState() => _AdminDashboardState();
+}
+
+class _AdminDashboardState extends State<AdminDashboard> {
+  Future<void> _logout() async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.signOut();
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Logged out successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error logging out: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showLogoutConfirmation() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _logout();
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Portal'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _showLogoutConfirmation,
+            tooltip: 'Logout',
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -62,7 +125,7 @@ class AdminDashboard extends StatelessWidget {
               title: 'Event Management',
               subtitle: 'View and manage all events',
               onTap: () {
-                Navigator.pushNamed(context, '/events');
+                Navigator.pushNamed(context, '/admin_events');
               },
             ),
             _AdminCard(
@@ -70,7 +133,7 @@ class AdminDashboard extends StatelessWidget {
               title: 'Resource Management',
               subtitle: 'Manage all resources',
               onTap: () {
-                Navigator.pushNamed(context, '/resources');
+                Navigator.pushNamed(context, '/admin_resources');
               },
             ),
             _AdminCard(

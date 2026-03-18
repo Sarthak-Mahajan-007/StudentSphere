@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/user_provider.dart';
-import '../providers/event_provider.dart';
-import '../providers/note_provider.dart';
+import '../core/providers/auth_provider.dart';
 import '../core/models/user_model.dart';
-import '../core/services/permission_service.dart';
-import 'events/events_screen.dart';
+import '../screens/dashboard/dashboard_screen.dart';
+import '../screens/events/events_screen.dart';
+import '../screens/resources/resources_list_screen.dart';
+import '../screens/chat/chat_list_screen.dart';
+import '../screens/hostel/hostel_application_screen.dart';
+import '../screens/hostel/mess_menu_screen.dart';
 import 'volunteers/volunteers_screen.dart';
 import 'notes/notes_screen.dart';
 import 'chat/chat_list_screen.dart';
@@ -30,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
           const VolunteersScreen(),
           const NotesScreen(),
           const ChatListScreen(),
+          const HostelApplicationScreen(),
+          const MessMenuScreen(),
         ];
       case UserRole.faculty:
         return [
@@ -91,6 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.chat_outlined),
             selectedIcon: Icon(Icons.chat),
             label: 'Chat',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Hostel',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.restaurant_outlined),
+            selectedIcon: Icon(Icons.restaurant),
+            label: 'Mess',
           ),
         ];
       case UserRole.faculty:

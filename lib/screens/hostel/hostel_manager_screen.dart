@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../core/models/user_model.dart';
 import '../../core/services/permission_service.dart';
+import 'hostel_applications_admin_screen.dart';
+import 'room_allocation_screen.dart';
+import 'mess_management_screen.dart';
 
 class HostelManagerScreen extends StatefulWidget {
   const HostelManagerScreen({Key? key}) : super(key: key);
@@ -339,21 +342,15 @@ class _HostelManagerScreenState extends State<HostelManagerScreen> {
   }
 
   Widget _buildRoomApplications() {
-    return const Center(
-      child: Text('Room Applications Screen - To be implemented'),
-    );
+    return const HostelApplicationsAdminScreen();
   }
 
   Widget _buildRoomAllocation() {
-    return const Center(
-      child: Text('Room Allocation Screen - To be implemented'),
-    );
+    return const RoomAllocationScreen();
   }
 
   Widget _buildMessManagement() {
-    return const Center(
-      child: Text('Mess Management Screen - To be implemented'),
-    );
+    return const MessManagementScreen();
   }
 
   Widget _buildStudentCommunication() {

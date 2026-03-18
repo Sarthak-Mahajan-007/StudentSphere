@@ -239,6 +239,18 @@ class SupabaseDatabaseService {
     return response['id'];
   }
 
+  static Stream<List<Map<String, dynamic>>> getResourcesStream() {
+    if (_client == null) {
+      return Stream.value([]);
+    }
+    
+    return _client!
+        .from('resources')
+        .select()
+        .order('created_at', ascending: false)
+        .asStream();
+  }
+
   /* ─────────────────── ACHIEVEMENTS ─────────────────── */
 
   static Future<List<Map<String, dynamic>>> getAchievements({
